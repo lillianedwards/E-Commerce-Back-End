@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { Category, Product } = require("../../models");
 
-
+//http://localhost:3001/api/categories == CATEGORY ENDPOINT
 
 // find all categories including its associated Products
 //http://localhost:3001/api/categories
@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
     });
     res.status(200).json(categoryData);
   } catch (err) {
+    console.log(err)
     res.status(500).json(err);
   }
 });
@@ -22,7 +23,12 @@ router.get("/:id", async (req, res) => {
   try {
     const categoryData = await Category.findByPk({
       include: [{ model: Product }],
-    });
+    }
+    );
+    if (!categoryData) {
+      res.status(404).json({message: "No category found with that ID!"});
+      return;
+    }
     res.status(200).json(categoryData);
   } catch (err) {
     console.log(err);
