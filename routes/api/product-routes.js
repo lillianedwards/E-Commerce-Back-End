@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 //http://localhost:3001/api/products/:id
 router.get("/:id", async (req, res) => {
   try {
-    productData = await Product.findByPk(req.params.id, {
+    const productData = await Product.findByPk(req.params.id, {
       include: [{ model: Category }, { model: Tag }],
     });
     if (!productData) {
