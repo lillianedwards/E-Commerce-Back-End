@@ -3,7 +3,7 @@ const { Category, Product } = require("../../models");
 
 //http://localhost:3001/api/categories == CATEGORY ENDPOINT
 
-// find all categories including its associated Products
+// find all categories including its associated Products ✅
 //http://localhost:3001/api/categories
 router.get("/", async (req, res) => {
   try {
@@ -17,11 +17,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-// find one category by its `id` value including its associated Products
+// find one category by its `id` value including its associated Products ✅
 //http://localhost:3001/api/categories/:id
 router.get("/:id", async (req, res) => {
   try {
-    const categoryData = await Category.findByPk({
+    const categoryData = await Category.findByPk(req.params.id, {
       include: [{ model: Product }],
     }
     );
@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//Create a new Category 
+//Create a new Category ✅
 //http://localhost:3001/api/categories
 router.post("/", async (req, res) => {
   try {
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-//Update a category by id 
+//Update a category by id ✅ -- HOW CAN I CHANGE THIS TO SHOW THE NEW OBJECT as as response
 //http://localhost:3001/api/categories/:id
 router.put("/:id", async (req, res) => {
   try {
@@ -69,19 +69,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// delete a category by its `id` value
+// delete a category by its `id` value ✅
 //http://localhost:3001/api/categories/:id
 router.delete("/:id", async (req, res) => {
   try {
-    const categoryData = await Category.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
+    const currentCategory = await Category.findByPk(req.params.id);
+    //setProducts is resetting the associations to nothing 
+    await currentCategory.setProducts([])
+    const categoryData = await currentCategory.destroy();
     if (!categoryData) {
       res.status(404).json({message: "There is no category with this ID."})
-      return;
     }
+    res.status(200).json(categoryData);
   }
   catch (err) {
     res.status(500).json(err);

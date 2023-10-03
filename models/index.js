@@ -4,8 +4,6 @@ const Category = require('./Category');
 const Tag = require('./Tag');
 const ProductTag = require('./ProductTag');
 
-//ARE WE USING CASCADE ON DELETE FOR THIS 
-
 
 // Products belongsTo Category
 Product.belongsTo(Category, {

@@ -3,7 +3,7 @@ const { Tag, Product, ProductTag } = require("../../models");
 
 //http://localhost:3001/api/tags == TAG ENDPOINT
 
-// find all tags including its associated Product data
+// find all tags including its associated Product data ✅
 //http://localhost:3001/api/tags
 router.get("/", async (req, res) => {
   try {
@@ -17,11 +17,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-// find a single tag by its `id` including its associated Product data
+// find a single tag by its `id` including its associated Product data ✅
 //http://localhost:3001/api/tags/:id
 router.get("/:id", async (req, res) => {
   try {
-    const tagData = await Tag.findByPk({
+    const tagData = await Tag.findByPk(req.params.id, {
       include: [{ model: Product }],
     });
     if (!tagData) {
@@ -35,7 +35,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//create new tag
+//create new tag ✅
 //http://localhost:3001/api/tags
 router.post("/", async (req, res) => {
   try {
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// update a tag's name by its `id` value
+// update a tag's name by its `id` value ✅
 //http://localhost:3001/api/tags/:id
 router.put("/:id", async (req, res) => {
   try {
@@ -68,8 +68,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// delete on tag by its `id` value
+
 //http://localhost:3001/api/tags/:id
+//Delete tag by id ✅
 router.delete("/:id", async (req, res) => {
   try {
     const tagData = await Tag.destroy({
@@ -81,6 +82,7 @@ router.delete("/:id", async (req, res) => {
       res.status(404).json({message: "There is no tag with this ID."})
       return;
     }
+    res.status(200).json(tagData);
   }
   catch (err) {
     res.status(500).json(err);
